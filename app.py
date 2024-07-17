@@ -1,9 +1,8 @@
+import streamlit as st
 import cv2
 from pyzbar import pyzbar
-import sys
 import pyperclip
 import time
-import streamlit as st
 
 def set_focus(camera, value):
     camera.set(cv2.CAP_PROP_AUTOFOCUS, 0)
@@ -11,11 +10,11 @@ def set_focus(camera, value):
 
 def scan_barcode():
     # Change the camera index to use the front-facing camera
-    front_camera_index = 1
+    front_camera_index = 0  # Adjust camera index based on your mobile device
     cap = cv2.VideoCapture(front_camera_index)
 
     if not cap.isOpened():
-        print("Error: Could not open camera.")
+        st.error("Failed to open camera.")
         return
 
     # Set an initial focus value
@@ -28,11 +27,11 @@ def scan_barcode():
         ret, frame = cap.read()
 
         if not ret:
-            st.write("Error: Failed to capture frame.")
+            st.error("Failed to capture frame.")
             continue
 
         barcodes = pyzbar.decode(frame)
-        
+
         for barcode in barcodes:
             (x, y, w, h) = barcode.rect
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
@@ -40,17 +39,14 @@ def scan_barcode():
             barcode_type = barcode.type
             text = f"{barcode_data} ({barcode_type})"
             cv2.putText(frame, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-            
+
             # Copy the barcode data to the clipboard
             pyperclip.copy(barcode_data)
-            print(f"Barcode data: {barcode_data}, type: {barcode_type}")
-            sys.exit(0)
+            st.success(f"Detected Barcode: {barcode_data}")
 
-        cv2.imshow('Barcode Scanner', frame)
-        key = cv2.waitKey(1) & 0xFF
-
-        if key == ord('q'):
-            break
+        # Display the frame
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Convert colorspace for Streamlit
+        st.image(frame, channels="RGB", use_column_width=True)
 
         # Check if it's time to change the focus
         if time.time() - last_focus_change_time > 3:
@@ -58,13 +54,14 @@ def scan_barcode():
             set_focus(cap, focus_value)
             last_focus_change_time = time.time()
 
-    cap.release()
-    cv2.destroyAllWindows()
+def main():
+    st.title("Mobile Barcode Scanner")
+    st.markdown("Please ensure your device has a camera enabled.")
 
-if __name__ == "__main__":
     scan_barcode()
 
-
+if __name__ == "__main__":
+    main()
 
 
 
