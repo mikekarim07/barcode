@@ -37,7 +37,7 @@
 # Import the required libraries
 import cv2
 from pyzbar.pyzbar import decode
-from openpyxl import load_workbook
+
 
 # Initialize the camera
 cap = cv2.VideoCapture(0)
