@@ -1,4 +1,4 @@
-opencv_python_headless==4.10.0.84
+opencv_python
 pyzbar==0.1.9
 streamlit==1.34.0
 streamlit_webrtc==0.47.7
