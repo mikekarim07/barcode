@@ -43,7 +43,7 @@ from pyzbar.pyzbar import decode
 cap = cv2.VideoCapture(0)
 
 if not cap.isOpened():
-    print("Error: No se pudo abrir la cámara.")
+    st.write("Error: No se pudo abrir la cámara.")
     exit()
 
 while True:
@@ -51,7 +51,7 @@ while True:
     ret, frame = cap.read()
 
     if not ret:
-        print("Error: No se pudo capturar el fotograma.")
+        st.write("Error: No se pudo capturar el fotograma.")
         continue
 
     # Convert the frame to grayscale
