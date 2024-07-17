@@ -46,8 +46,11 @@ while True:
     # Capture a frame from the camera
     ret, frame = cap.read()
 
-    # Decode barcodes from the captured frame
-    barcodes = decode(frame)
+    # Convert the frame to grayscale
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    # Decode barcodes from the grayscale frame
+    barcodes = decode(gray)
 
     # Check if any barcode is detected
     if barcodes:
@@ -69,4 +72,3 @@ while True:
 # Release the camera and close the window
 cap.release()
 cv2.destroyAllWindows()
-
