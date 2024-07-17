@@ -38,6 +38,7 @@
 import cv2
 import numpy as np
 from pyzbar.pyzbar import decode
+import streamlit as st
 
 # Initialize the camera
 cap = cv2.VideoCapture(0)
