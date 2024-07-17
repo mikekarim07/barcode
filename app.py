@@ -36,6 +36,7 @@
 
 # Import the required libraries
 import cv2
+import numpy as np
 from pyzbar.pyzbar import decode
 
 # Initialize the camera
