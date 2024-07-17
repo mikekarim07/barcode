@@ -3,6 +3,7 @@ from pyzbar import pyzbar
 import sys
 import pyperclip
 import time
+import streamlit as st
 
 def set_focus(camera, value):
     camera.set(cv2.CAP_PROP_AUTOFOCUS, 0)
@@ -13,6 +14,10 @@ def scan_barcode():
     front_camera_index = 1
     cap = cv2.VideoCapture(front_camera_index)
 
+    if not cap.isOpened():
+        print("Error: Could not open camera.")
+        return
+
     # Set an initial focus value
     focus_value = 0.0
     set_focus(cap, focus_value)
@@ -21,6 +26,11 @@ def scan_barcode():
 
     while True:
         ret, frame = cap.read()
+
+        if not ret:
+            st.write("Error: Failed to capture frame.")
+            continue
+
         barcodes = pyzbar.decode(frame)
         
         for barcode in barcodes:
@@ -53,7 +63,6 @@ def scan_barcode():
 
 if __name__ == "__main__":
     scan_barcode()
-
 
 
 
